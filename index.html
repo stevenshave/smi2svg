@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="Author" content="greg Landrum">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <title>SMI2SVG</title>
+</head>
+<script src="./RDKit_minimal.js"></script>
+<script>
+    function parseMolecules() {
+        document.getElementById("moleculeTable").hidden=false;
+        var arrayOfLines = document.getElementById("smilesinputid").value.split("\n");
+        console.log(arrayOfLines)
+        for (var i = 0; i < arrayOfLines.length; i++) {
+            if (arrayOfLines[i].length < 2) continue;
+            var d = arrayOfLines[i].split(" ")
+            console.log("D= ", d)
+            var newrow = document.getElementById("moleculeTable").insertRow(-1)
+            var molcell = newrow.insertCell(0)
+            var titlecell = newrow.insertCell(1)
+            var descriptorcell = newrow.insertCell(2)
+            var mol = Module.get_mol(d[0]);
+
+            if (mol.is_valid()) {
+                var svg = mol.get_svg();
+                molcell.innerHTML = "<div src='data:image/svg+xml," + svg + ">";
+                titlecell.innerHTML = d[1];
+                var descs=JSON.parse(mol.get_descriptors())
+                descriptorcell.innerHTML = "MW="+descs.amw+"\nCrippenClogP="+descs.CrippenClogP+"\nTPSA="+descs.tpsa;
+                console.dir(descs)
+            }
+            else { molcell.innerHTML = "Invalid SMILES"; }
+        }
+
+    }
+</script>
+
+<body>
+
+    <h1>Smi2Svg</h1>
+    <p>
+    <form>
+        <textarea id="smilesinputid" name="smilesinput" rows="4" cols="80">c1ccccc1 benzene
+C1=CC=C(C(=C1)CC(=O)O)NC2=C(C=CC=C2Cl)Cl diclofenac
+</textarea>
+        <br> <button type="button" onclick="parseMolecules()">Show structures</button>
+    </form>
+
+    </p>
+    <p>
+    <table id="moleculeTable" hidden=True>
+        <tr>
+            <th>2D</th>
+            <th>Name</th>
+            <th>Descriptors</th>
+        </tr>
+
+    </table>
+
+    </p>
+
+</body>
+
+</html>
