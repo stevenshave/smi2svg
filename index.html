@@ -20,13 +20,16 @@
 <script src="./RDKit_minimal.js"></script>
 <script>
     function parseMolecules() {
+        var table = document.getElementById("moleculeTable");
+        while (table.hasChildNodes()) {
+            table.removeChild(table.firstChild);
+        }
         document.getElementById("moleculeTable").hidden = false;
         var arrayOfLines = document.getElementById("smilesinputid").value.split("\n");
         console.log(arrayOfLines)
         for (var i = 0; i < arrayOfLines.length; i++) {
             if (arrayOfLines[i].length < 2) continue;
             var d = arrayOfLines[i].split(" ")
-            console.log("D= ", d)
             var newrow = document.getElementById("moleculeTable").insertRow(-1)
             var molcell = newrow.insertCell(0)
             var titlecell = newrow.insertCell(1)
@@ -38,8 +41,7 @@
                 molcell.innerHTML = "<div src='data:image/svg+xml," + svg + ">";
                 titlecell.innerHTML = d[1];
                 var descs = JSON.parse(mol.get_descriptors())
-                descriptorcell.innerHTML = "MW=" + descs.amw + "\nCrippenClogP=" + descs.CrippenClogP + "\nTPSA=" + descs.tpsa;
-                console.dir(descs)
+                descriptorcell.innerHTML = "MW=" + descs.amw + "CrippenClogP=" + descs.CrippenClogP + "TPSA=" + descs.tpsa;
             }
             else { molcell.innerHTML = "Invalid SMILES"; }
         }
