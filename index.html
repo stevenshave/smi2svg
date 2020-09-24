@@ -7,11 +7,20 @@
     <meta name="Author" content="greg Landrum">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <title>SMI2SVG</title>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168028705-3"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-168028705-3');
+    </script>
 </head>
 <script src="./RDKit_minimal.js"></script>
 <script>
     function parseMolecules() {
-        document.getElementById("moleculeTable").hidden=false;
+        document.getElementById("moleculeTable").hidden = false;
         var arrayOfLines = document.getElementById("smilesinputid").value.split("\n");
         console.log(arrayOfLines)
         for (var i = 0; i < arrayOfLines.length; i++) {
@@ -28,8 +37,8 @@
                 var svg = mol.get_svg();
                 molcell.innerHTML = "<div src='data:image/svg+xml," + svg + ">";
                 titlecell.innerHTML = d[1];
-                var descs=JSON.parse(mol.get_descriptors())
-                descriptorcell.innerHTML = "MW="+descs.amw+"\nCrippenClogP="+descs.CrippenClogP+"\nTPSA="+descs.tpsa;
+                var descs = JSON.parse(mol.get_descriptors())
+                descriptorcell.innerHTML = "MW=" + descs.amw + "\nCrippenClogP=" + descs.CrippenClogP + "\nTPSA=" + descs.tpsa;
                 console.dir(descs)
             }
             else { molcell.innerHTML = "Invalid SMILES"; }
